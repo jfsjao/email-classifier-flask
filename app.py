@@ -1,18 +1,22 @@
-from flask import Flask, request, render_template, send_from_directory, session, jsonify
+from flask import Flask, request, render_template, jsonify
 import requests
 import json
 import os
 import re
 import pdfminer.high_level
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv  # Importa dotenv para carregar variáveis de ambiente
+
+# Carregar variáveis de ambiente do .env
+load_dotenv()
 
 # Configuração da API Gemini
-GEMINI_API_KEY = os.getenv("AIzaSyBswUz3euWllZchQpwJ5oocnkteNIN73p0", "AIzaSyBswUz3euWllZchQpwJ5oocnkteNIN73p0")  
+GEMINI_API_KEY = os.getenv("AIzaSyBswUz3euWllZchQpwJ5oocnkteNIN73p0")  # Obtém a chave do ambiente
 GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
 
 # Inicialização do Flask
 app = Flask(__name__, static_folder="static")
-app.secret_key = "chave_secreta_flask"
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "chave_secreta_flask")
 
 # Configuração para upload
 UPLOAD_FOLDER = "uploads"
@@ -23,25 +27,23 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-# Limpa o histórico ao iniciar a aplicação (apenas uma vez)
-if os.path.exists("historico.json"):
-    os.remove("historico.json")
+# Nome do arquivo de histórico
+HISTORICO_FILE = "historico.json"
 
 # Função para verificar extensão de arquivo
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Função para extrair texto de arquivos
+# Função para extrair texto de arquivos .txt
 def extract_text_from_txt(file_path):
-    """Lê e retorna o conteúdo de um arquivo .txt."""
     try:
         with open(file_path, "r", encoding="utf-8") as file:
             return file.read().strip()
     except Exception as e:
         return f"Erro ao ler arquivo TXT: {str(e)}"
 
+# Função para extrair texto de arquivos .pdf
 def extract_text_from_pdf(file_path):
-    """Extrai e retorna o texto de um arquivo .pdf."""
     try:
         return pdfminer.high_level.extract_text(file_path).strip()
     except Exception as e:
@@ -54,14 +56,17 @@ def extract_subject(text):
 
 # Função para carregar histórico do arquivo JSON
 def carregar_historico():
-    if os.path.exists("historico.json"):
-        with open("historico.json", "r", encoding="utf-8") as file:
-            return json.load(file)
+    if os.path.exists(HISTORICO_FILE):
+        with open(HISTORICO_FILE, "r", encoding="utf-8") as file:
+            try:
+                return json.load(file)
+            except json.JSONDecodeError:
+                return []
     return []
 
 # Função para salvar histórico no arquivo JSON
 def salvar_historico(historico):
-    with open("historico.json", "w", encoding="utf-8") as file:
+    with open(HISTORICO_FILE, "w", encoding="utf-8") as file:
         json.dump(historico, file, ensure_ascii=False, indent=4)
 
 # Página inicial
@@ -136,13 +141,17 @@ def process_email():
             data = response.json()
             gemini_text = data["candidates"][0]["content"]["parts"][0]["text"]
             gemini_text = gemini_text.replace("```json", "").replace("```", "").strip()
-            resultado = json.loads(gemini_text)
+            
+            try:
+                resultado = json.loads(gemini_text)
+            except json.JSONDecodeError:
+                return jsonify({"erro": "Erro ao interpretar a resposta da IA."})
 
             email_info = {
                 "assunto": assunto,
                 "email": text,
-                "categoria": resultado["categoria"],
-                "resposta": resultado["resposta"]
+                "categoria": resultado.get("categoria", "Desconhecido"),
+                "resposta": resultado.get("resposta", "Nenhuma resposta gerada.")
             }
 
             historico.append(email_info)
@@ -151,7 +160,7 @@ def process_email():
             return jsonify(email_info)
 
         else:
-            return jsonify({"erro": f"Erro na API Gemini: {response.text}"})
+            return jsonify({"erro": f"Erro na API Gemini: {response.status_code} - {response.text}"})
 
     except Exception as e:
         return jsonify({"erro": f"Erro na comunicação com a API: {str(e)}"})

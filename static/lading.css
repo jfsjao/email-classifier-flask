@@ -1,0 +1,96 @@
+/* Reset de estilos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Corpo da página */
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+/* Container principal */
+.landing-container {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+}
+
+/* Título */
+h1 {
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+/* Texto de introdução */
+p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Container dos passos */
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Cada passo */
+.step {
+    background: #f1f1f1;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.step img {
+    width: 50px;
+    margin-bottom: 10px;
+}
+
+.step h3 {
+    color: #007bff;
+    font-size: 18px;
+}
+
+/* Botão para acessar a aplicação */
+.btn {
+    display: inline-block;
+    padding: 12px 18px;
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background: #0056b3;
+}
+
+/* Rodapé */
+footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #666;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .landing-container {
+        width: 90%;
+    }
+}
