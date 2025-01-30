@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classificação de Emails</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/100/000000/email.png">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Classificação de Emails</h1>
+        
+        <form id="emailForm" method="POST" enctype="multipart/form-data">
+            <textarea id="email" name="email" placeholder="Digite seu email aqui..."></textarea>
+            <input type="file" id="file" name="file" accept=".txt,.pdf">
+            <button type="submit">Classificar</button>
+        </form>
+
+        <div id="resultado"></div>
+
+        <h2>Histórico</h2>
+        <button id="clearHistory" class="clear-btn">Limpar Histórico</button>
+
+        <ul id="historico">
+            {% for item in historico %}
+                <li data-email="{{ item.email }}" data-resposta="{{ item.resposta }}">
+                    <strong>{{ item.assunto }}</strong> - {{ item.categoria }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Modal para exibir detalhes do email -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Detalhes do Email</h3>
+            <p id="emailDetalhes"></p>
+            <h3>Resposta Automática</h3>
+            <p id="respostaDetalhes"></p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

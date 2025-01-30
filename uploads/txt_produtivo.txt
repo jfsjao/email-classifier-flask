@@ -1,0 +1,9 @@
+Assunto: Problema no sistema
+
+Olá, equipe da AutoU!
+
+Estou tendo dificuldades para acessar o sistema. Toda vez que tento fazer login, aparece uma mensagem de erro dizendo "Credenciais inválidas". Já tentei redefinir a senha, mas o problema persiste.
+
+Poderiam me ajudar?
+
+Obrigado.
