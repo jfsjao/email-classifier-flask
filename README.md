@@ -2,6 +2,8 @@
 
 O **Classificador Inteligente de Emails** é uma aplicação web baseada em Flask que utiliza a **API Gemini do Google** para classificar emails automaticamente como **produtivos** ou **improdutivos** e gerar respostas sugeridas com base no conteúdo analisado.
 
+**https://classificador-de-email.onrender.com/**
+
 ---
 
 ## 🚀 Tecnologias Utilizadas
@@ -124,7 +126,7 @@ pip install -r requirements.txt
 ---
 
 ## 🖥️ **Exemplo de Uso**
-1. Acesse **http://127.0.0.1:5000/**
+1. Acesse **http://127.0.0.1:5000/**, quando iniciado localmente, ou acesse https://classificador-de-email.onrender.com/
 2. Clique em **"Começar Agora"**.
 3. Digite ou envie um email para análise.
 4. Veja a classificação e a resposta gerada automaticamente.
