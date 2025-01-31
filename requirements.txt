@@ -3,3 +3,4 @@ requests
 pdfminer.six
 python-dotenv
 werkzeug
+gunicorn
