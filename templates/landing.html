@@ -3,40 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bem-vindo - Classificador de Emails</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='landing.css') }}">
+    <title>Classificador Inteligente de Emails</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="icon" type="image/png" href="https://img.icons8.com/100/000000/email.png">
 </head>
 <body>
 
     <div class="landing-container">
-        <h1>Classificador Inteligente de Emails 📩</h1>
+        <h1>📩 Classificador Inteligente de Emails</h1>
         <p>Automatize a triagem de emails e receba respostas automáticas geradas por IA.</p>
 
         <div class="steps">
             <div class="step">
                 <img src="https://img.icons8.com/ios-filled/100/007bff/upload.png" alt="Upload">
                 <h3>1. Envie seu email</h3>
-                <p>Digite ou faça upload de um arquivo `.txt` ou `.pdf` contendo o email que deseja classificar.</p>
+                <p>Digite ou faça upload de um arquivo ".txt" ou ".pdf" contendo o email que deseja classificar.</p>
             </div>
 
             <div class="step">
-                <img src="https://img.icons8.com/ios-filled/100/007bff/artificial-intelligence.png" alt="IA">
+                <img src="https://img.icons8.com/ios-filled/100/007bff/artificial-intelligence.png" alt="Classificação">
                 <h3>2. Classificação Automática</h3>
                 <p>Nosso sistema de inteligência artificial analisa o conteúdo e determina se é produtivo ou improdutivo.</p>
             </div>
 
             <div class="step">
-                <img src="https://img.icons8.com/ios-filled/100/007bff/email-open.png" alt="Resposta">
+                <img src="https://img.icons8.com/ios-filled/100/007bff/email.png" alt="Resposta">
                 <h3>3. Resposta Gerada</h3>
                 <p>Uma sugestão de resposta é fornecida automaticamente, poupando seu tempo.</p>
             </div>
         </div>
 
-        <a href="/app" class="btn">Começar Agora</a>
+        <a href="{{ url_for('home') }}" class="btn">Começar Agora</a>
+
 
         <footer>
-            <p>Desenvolvido por <strong>AutoU</strong> | Soluções Inteligentes para Processamento de Emails</p>
+            Desenvolvido por <strong>João Felipe Silva</strong> | 
+            <a href="https://www.linkedin.com/in/joao-silva-jfs/" target="_blank">LinkedIn</a> | 
+            <a href="https://github.com/jfsjao" target="_blank">GitHub</a>
         </footer>
     </div>
 

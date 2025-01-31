@@ -10,6 +10,9 @@
 <body>
 
     <div class="container">
+        <!-- Botão para voltar à landing page -->
+        <a href="/" class="back-btn">← Voltar</a>
+
         <h1>Classificação de Emails</h1>
         
         <form id="emailForm" method="POST" enctype="multipart/form-data">
@@ -30,18 +33,26 @@
                 </li>
             {% endfor %}
         </ul>
+    
+        <!-- Footer dentro do container -->
+        <footer>
+            Desenvolvido por <strong>João Felipe Silva</strong> | 
+            <a href="https://www.linkedin.com/in/joao-silva-jfs/" target="_blank">LinkedIn</a> | 
+            <a href="https://github.com/jfsjao" target="_blank">GitHub</a>
+        </footer>
     </div>
     
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h3>Detalhes do Email</h3>
+            <h3>📨 Detalhes do Email</h3>
             <p id="emailDetalhes"></p>
-            <h3>Resposta Automática</h3>
+            <h3>💬 Resposta Automática</h3>
             <p id="respostaDetalhes"></p>
         </div>
     </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 </html>
