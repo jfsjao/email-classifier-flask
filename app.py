@@ -157,5 +157,6 @@ def process_email():
         return jsonify({"erro": f"Erro na comunicação com a API: {str(e)}"})
 
 # Iniciar o Flask
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))  # Usa a porta fornecida pelo Render
+    app.run(host="0.0.0.0", port=port)
