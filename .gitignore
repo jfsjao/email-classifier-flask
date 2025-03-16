@@ -1,0 +1,24 @@
+# Ignorar ambiente virtual
+venv/
+.venv/
+
+# Ignorar credenciais e variáveis de ambiente
+.env
+
+# Ignorar arquivos de cache do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignorar pastas do VSCode/PyCharm
+.vscode/
+.idea/
+
+# Ignorar logs e banco de dados local
+logs/
+*.log
+db.sqlite3
+
+# Ignorar arquivos do sistema
+.DS_Store
+Thumbs.db

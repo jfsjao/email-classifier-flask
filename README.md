@@ -2,7 +2,7 @@
 
 O **Classificador Inteligente de Emails** é uma aplicação web baseada em Flask que utiliza a **API Gemini do Google** para classificar emails automaticamente como **produtivos** ou **improdutivos** e gerar respostas sugeridas com base no conteúdo analisado.
 
-**https://classificador-de-email.onrender.com/**
+🔗 **Acesse a aplicação em produção:** [Classificador de Email](https://classificador-de-email.onrender.com/)
 
 ---
 
@@ -38,6 +38,12 @@ venv\Scripts\activate      # Windows
 ```sh
 pip install -r requirements.txt
 ```
+
+### 4️⃣ **Crie o arquivo `.env`**
+```sh
+echo GEMINI_API_KEY="sua-chave-aqui" > .env
+```
+
 ---
 
 ## 🚀 Como Executar o Projeto
@@ -47,7 +53,7 @@ Após instalar as dependências e configurar o `.env`, execute:
 python app.py
 ```
 
-O servidor Flask será iniciado e estará acessível em **http://127.0.0.1:5000/** para testes local.
+O servidor Flask será iniciado e estará acessível em **http://127.0.0.1:10000/** para testes locais.
 
 ---
 
@@ -73,12 +79,6 @@ O servidor Flask será iniciado e estará acessível em **http://127.0.0.1:5000/
 ### 📜 **Histórico Temporário**
 - Os últimos **5 emails** analisados são armazenados temporariamente na **sessão do usuário** e no **LocalStorage**.
 - O histórico **não é salvo permanentemente**.
-
-### 🗑️ **Limpeza de Histórico**
-- O usuário pode limpar o histórico temporário com um botão.
-
-### 🔄 **Botão de Voltar para a Landing Page**
-- Um botão discreto no **canto superior esquerdo** permite retornar para a página inicial.
 
 ---
 
@@ -109,24 +109,39 @@ O servidor Flask será iniciado e estará acessível em **http://127.0.0.1:5000/
 
 ---
 
-## 📜 **Arquivo `requirements.txt`**
-Caso precise instalar as dependências manualmente, o **`requirements.txt`** contém:
-```txt
-flask
-requests
-pdfminer.six
-python-dotenv
-werkzeug
-```
-Instale usando:
-```sh
-pip install -r requirements.txt
+## 📜 **Arquivo `.gitignore` (Novo!)**
+Para evitar que arquivos indesejados sejam enviados para o repositório, utilizamos um `.gitignore` com as seguintes regras:
+```gitignore
+# Ignorar ambiente virtual
+venv/
+.venv/
+
+# Ignorar credenciais e variáveis de ambiente
+.env
+
+# Ignorar arquivos de cache do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignorar pastas do VSCode/PyCharm
+.vscode/
+.idea/
+
+# Ignorar logs e banco de dados local
+logs/
+*.log
+db.sqlite3
+
+# Ignorar arquivos do sistema
+.DS_Store
+Thumbs.db
 ```
 
 ---
 
 ## 🖥️ **Exemplo de Uso**
-1. Acesse **http://127.0.0.1:5000/**, quando iniciado localmente, ou acesse https://classificador-de-email.onrender.com/
+1. Acesse **http://127.0.0.1:10000/** quando iniciado localmente ou visite **https://classificador-de-email.onrender.com/**
 2. Clique em **"Começar Agora"**.
 3. Digite ou envie um email para análise.
 4. Veja a classificação e a resposta gerada automaticamente.
