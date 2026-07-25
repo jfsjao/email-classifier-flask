@@ -1,48 +1,52 @@
-from flask import Blueprint, request, jsonify, session
-import services.file_processing as file_processing
-from services.gemini_service import process_email_with_gemini
+from flask import Blueprint, jsonify, request, session
 
-# Criar Blueprint para as rotas de email
+from services.email_service import (
+    EmailProcessingError,
+    GeminiClientError,
+    allowed_file,
+    extract_text_from_pdf,
+    extract_text_from_txt,
+    process_email_with_gemini,
+)
+
 email_bp = Blueprint("email", __name__)
 
-ALLOWED_EXTENSIONS = {"txt", "pdf"}
 
-def allowed_file(filename):
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
-
-# Rota para processar emails
 @email_bp.route("/process", methods=["POST"])
 def process_email():
     text = None
     historico = session.get("historico", [])
 
-    # Processar arquivos
-    if "file" in request.files and request.files["file"].filename != "":
-        file = request.files["file"]
-        if file and allowed_file(file.filename):
-            if file.filename.endswith(".txt"):
-                text = file_processing.extract_text_from_txt(file)
-            elif file.filename.endswith(".pdf"):
-                text = file_processing.extract_text_from_pdf(file)
+    file_storage = request.files.get("file")
+    if file_storage and file_storage.filename:
+        if not allowed_file(file_storage.filename):
+            return jsonify({"erro": "Tipo de arquivo não suportado. Envie um arquivo .txt ou .pdf."}), 400
 
-    # Se nenhum arquivo foi enviado, verifica o campo de texto
+        try:
+            if file_storage.filename.lower().endswith(".txt"):
+                text = extract_text_from_txt(file_storage)
+            elif file_storage.filename.lower().endswith(".pdf"):
+                text = extract_text_from_pdf(file_storage)
+        except EmailProcessingError as exc:
+            return jsonify({"erro": str(exc)}), 400
+
     if not text:
         text = request.form.get("email", "").strip()
 
     if not text:
-        return jsonify({"erro": "Nenhum email ou arquivo válido enviado."})
+        return jsonify({"erro": "Nenhum email ou arquivo válido enviado."}), 400
 
-    assunto = file_processing.extract_subject(text)
-
-    # Processar com API Gemini
-    email_info = process_email_with_gemini(assunto, text)
+    try:
+        email_info = process_email_with_gemini("Sem Assunto", text)
+    except GeminiClientError as exc:
+        return jsonify({"erro": str(exc)}), 502
 
     historico.append(email_info)
-    session["historico"] = historico  # Salvar histórico
+    session["historico"] = historico[-5:]
 
     return jsonify(email_info)
 
-# Rota para limpar histórico
+
 @email_bp.route("/clear_history", methods=["POST"])
 def clear_history():
     session.pop("historico", None)

@@ -1,157 +1,95 @@
 # 📩 Classificador Inteligente de Emails
 
-O **Classificador Inteligente de Emails** é uma aplicação web baseada em Flask que utiliza a **API Gemini do Google** para classificar emails automaticamente como **produtivos** ou **improdutivos** e gerar respostas sugeridas com base no conteúdo analisado.
-
-🔗 **Acesse a aplicação em produção:** [Classificador de Email](https://classificador-de-email.onrender.com/)
+O **Classificador Inteligente de Emails** é uma aplicação web baseada em Flask para classificar mensagens como produtivas ou improdutivas e gerar respostas sugeridas com apoio da API Gemini.
 
 ---
 
-## 🚀 Tecnologias Utilizadas
+## 🏗️ Arquitetura atual
 
-- **Python 3.8+**
-- **Flask** (Framework Web)
-- **Google Gemini API** (Inteligência Artificial)
-- **JavaScript (Fetch API)** (Comunicação Assíncrona)
-- **HTML5 e CSS3** (Interface Gráfica)
-- **pdfminer.six** (Processamento de PDFs)
-- **Session do Flask** (Histórico de Navegação)
-- **LocalStorage** (Histórico Temporário no Navegador)
+A aplicação foi reorganizada para seguir um padrão mais profissional:
+
+- factory pattern para criação da aplicação Flask
+- configuração centralizada via módulo de configuração
+- rotas isoladas em blueprint
+- camada de serviço dedicada para processamento de arquivos e integração com a IA
+- tratamento explícito de erros para entradas inválidas e falhas de API
 
 ---
 
-## 🛠️ Instalação e Configuração
+## 🚀 Tecnologias
 
-### 1️⃣ **Clone o Repositório**
+- Python 3.10+
+- Flask
+- Google Gemini API
+- pdfminer.six
+- python-dotenv
+- pytest/unittest para testes automatizados
+
+---
+
+## 🛠️ Instalação e configuração
+
+### 1. Criar ambiente virtual
 ```sh
-git clone https://github.com/jfsjao/email-classifier-flask.git
-cd email-classifier-flask
+python -m venv .venv
+source .venv/bin/activate
 ```
 
-### 2️⃣ **Crie um Ambiente Virtual (Recomendado)**
-```sh
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate      # Windows
-```
-
-### 3️⃣ **Instale as Dependências**
+### 2. Instalar dependências
 ```sh
 pip install -r requirements.txt
 ```
 
-### 4️⃣ **Crie o arquivo `.env`**
+### 3. Configurar variáveis de ambiente
+Copie o arquivo de exemplo e ajuste os valores:
 ```sh
-echo GEMINI_API_KEY="sua-chave-aqui" > .env
+cp .env.example .env
 ```
 
----
+Exemplo:
+```env
+FLASK_SECRET_KEY=troque-esta-chave
+FLASK_ENV=development
+GEMINI_API_KEY=sua-chave-gemini
+```
 
-## 🚀 Como Executar o Projeto
-
-Após instalar as dependências e configurar o `.env`, execute:
+### 4. Executar a aplicação
 ```sh
 python app.py
 ```
 
-O servidor Flask será iniciado e estará acessível em **http://127.0.0.1:10000/** para testes locais.
+A aplicação fica disponível em http://127.0.0.1:10000/.
 
 ---
 
-## 📝 Funcionalidades
+## 🧪 Testes
 
-### 🏠 **Landing Page (Explicação do Sistema)**
-- Explica de forma visual como o sistema funciona.
-- Permite acessar a aplicação principal com um botão "Começar Agora".
+Os testes automatizados cobrem a criação da aplicação e as validações das rotas principais:
 
-### 📤 **Envio de Email ou Arquivo**
-- O usuário pode **digitar um email manualmente** ou **enviar um arquivo** (`.txt` ou `.pdf`).
-- O conteúdo do email é analisado automaticamente.
-
-### 🤖 **Classificação Automática**
-- A API Gemini classifica o email como:
-  - **Produtivo** → Requer uma ação, dúvida ou suporte.
-  - **Improdutivo** → Apenas informativo, agradecimentos, etc.
-
-### ✉️ **Geração de Resposta Automática**
-- A IA gera uma resposta automática para o email com base na análise.
-- O usuário pode visualizar e copiar a resposta gerada.
-
-### 📜 **Histórico Temporário**
-- Os últimos **5 emails** analisados são armazenados temporariamente na **sessão do usuário** e no **LocalStorage**.
-- O histórico **não é salvo permanentemente**.
-
----
-
-## 🔧 **Endpoints da API**
-### ➤ `GET /`
-- Exibe a **Landing Page**.
-
-### ➤ `GET /app`
-- Exibe a **Página Principal** para classificar emails.
-
-### ➤ `POST /process`
-- Recebe um email ou arquivo e retorna a **classificação** e **resposta gerada**.
-- **Parâmetros:**
-  - `email` (opcional) → Texto do email.
-  - `file` (opcional) → Arquivo `.txt` ou `.pdf`.
-- **Resposta (JSON):**
-```json
-{
-  "assunto": "Reunião sobre o projeto",
-  "email": "Olá, gostaria de agendar uma reunião...",
-  "categoria": "Produtivo",
-  "resposta": "Assunto: Reunião sobre o projeto\n\nOlá, podemos marcar um horário para discutir os detalhes?"
-}
-```
-
-### ➤ `POST /clear_history`
-- Limpa o histórico temporário da sessão.
-
----
-
-## 📜 **Arquivo `.gitignore` (Novo!)**
-Para evitar que arquivos indesejados sejam enviados para o repositório, utilizamos um `.gitignore` com as seguintes regras:
-```gitignore
-# Ignorar ambiente virtual
-venv/
-.venv/
-
-# Ignorar credenciais e variáveis de ambiente
-.env
-
-# Ignorar arquivos de cache do Python
-__pycache__/
-*.pyc
-*.pyo
-
-# Ignorar pastas do VSCode/PyCharm
-.vscode/
-.idea/
-
-# Ignorar logs e banco de dados local
-logs/
-*.log
-db.sqlite3
-
-# Ignorar arquivos do sistema
-.DS_Store
-Thumbs.db
+```sh
+python -m unittest discover -s tests -v
 ```
 
 ---
 
-## 🖥️ **Exemplo de Uso**
-1. Acesse **http://127.0.0.1:10000/** quando iniciado localmente ou visite **https://classificador-de-email.onrender.com/**
-2. Clique em **"Começar Agora"**.
-3. Digite ou envie um email para análise.
-4. Veja a classificação e a resposta gerada automaticamente.
+## 🔧 Endpoints principais
+
+- GET /
+- GET /app
+- POST /email/process
+- POST /email/clear_history
+
+A rota de processamento aceita um texto direto ou um arquivo .txt/.pdf.
 
 ---
 
-## 📢 **Autor**
-Desenvolvido por **João Felipe Silva**  
-🔗 [LinkedIn](https://www.linkedin.com/in/joao-silva-jfs/)  
-🔗 [GitHub](https://github.com/jfsjao)  
+## ✅ Melhorias aplicadas
 
----
+- separação de responsabilidades entre rotas e serviços
+- validação de upload e mensagens vazias
+- respostas HTTP mais claras para erros
+- configuração externa para chaves e ambiente
+- histórico de sessão limitado e mais previsível
+- estrutura pronta para evoluir para testes mais completos e novas integrações
+
 
